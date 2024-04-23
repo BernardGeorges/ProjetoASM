@@ -1,29 +1,32 @@
 from spade import behaviour
 from spade.message import Message  
-from aux_classes import Energy
+from aux_classes.Energy import Energy
+import jsonpickle
 
 class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
     async def run(self):
         print("InformEnergyProduced_behav: Running")
 
         energySource = self.agent.energySource
-        energyProduced = energySource.get_generatedEnergy()
+        energyProduced, timeProduced = energySource.get_generatedEnergy()
 
-        print("Energy Produced: {} kWh".format(energyProduced))
+        scheduler_jid = self.agent.get("scheduler_jid")
+        distributor_jid = self.agent.get("distributor_jid")
 
-        scheduler_jid = self.get("scheduler_jid")
-        distributor_jid = self.get("distributor_jid")
-
-        energy = Energy(energyProduced)
+        energy = Energy(energyProduced, timeProduced)        
+        # Informing the Scheduler about the energy produced
 
         msgScheduler = Message(to=scheduler_jid)
-        msgScheduler.body = str(energyProduced)
+        msgScheduler.body = jsonpickle.encode(energy)
+        msgScheduler.set_metadata("performative", "inform_production")
         await self.send(msgScheduler)
 
-        print("Msg with Energy Produced sent to Scheduler")
-        
-        msgDistributor = Message(to=distributor_jid)
-        msgDistributor.body = energy
-        await self.send(msgDistributor)
+        print("Source: Msg with Energy Produced sent to Scheduler")
 
-        print("Energy Produced sent to Distributor")
+        #Sending Energy produced to the distributer agent
+       # msgDistributor = Message(to=distributor_jid)
+       # msgDistributor.body = jsonpickle.encode(energy)
+       # msgDistributor.set_metadata("performative", "energy_transfer")
+       # await self.send(msgDistributor)
+#
+       # print("Energy Produced sent to Distributor")

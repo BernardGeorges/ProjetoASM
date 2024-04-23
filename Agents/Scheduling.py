@@ -4,9 +4,12 @@
 # 3. Schedule the energy produced by the sources to the houses
 
 from spade import agent
+from Behaviours.EnergySchedueling import EnergySchedueling_behav
 
 class SchedulingAgent(agent.Agent):
 
     async def setup(self):
         print("Scheduling Agent starting...")
-        pass
+        behav = EnergySchedueling_behav(period=10)
+        self.add_behaviour(behav)
+        

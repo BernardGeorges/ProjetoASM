@@ -2,6 +2,7 @@ from spade import agent
 import random
 
 from Behaviours.InformEnergyNeeded_behav import InformEnergyNeeded_behav
+from aux_classes.HouseRequest import HouseRequest
 
 class HouseAgent(agent.Agent):
 
@@ -15,6 +16,7 @@ class HouseAgent(agent.Agent):
         self.add_behaviour(behav)
 
 
-    def getNeededEnergy(self):
-        return random.randint(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1])
+    def getNeededEnergy(self, maxTime = 1):
+        request = HouseRequest(self.jid, random.uniform(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1]), random.randint(1, maxTime))
+        return request
 

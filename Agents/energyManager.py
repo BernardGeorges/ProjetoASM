@@ -1,5 +1,6 @@
 #Agent responsible for managing the energy of the multiple sources in the system. It is responsible for the following tasks:
 #1. Notify the scheduler agent about the amount of energy produced
+#2. Send the energy produced to the distributor agentS
 
 import random
 from spade import agent
@@ -20,7 +21,7 @@ class EnergySource():
             solar = random.uniform(self.possibleValues['solar']['Sunny'][0], self.possibleValues['solar']['Sunny'][1])
             wind = random.uniform(self.possibleValues['wind']['medium'][0], self.possibleValues['wind']['medium'][1])
             hidrolics = random.uniform(self.possibleValues['hidrolics'][0], self.possibleValues['hidrolics'][1])
-            return solar * self.sourcesAmount['solar'] + wind * self.sourcesAmount['wind'] + hidrolics * self.sourcesAmount['hidrolics']
+            return solar * self.sourcesAmount['solar'] + wind * self.sourcesAmount['wind'] + hidrolics * self.sourcesAmount['hidrolics'] , random.randint(1,5)
 
 class EnergyManagerAgent(agent.Agent):
 
@@ -33,5 +34,5 @@ class EnergyManagerAgent(agent.Agent):
         self.energySource = EnergySource(solar, wind, hidrolics)
         #self.set("energySource", energySource)
 
-        behav = InformEnergyProduced_behav(period=1)
+        behav = InformEnergyProduced_behav(period=60)
         self.add_behaviour(behav)

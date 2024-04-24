@@ -10,6 +10,6 @@ class SchedulingAgent(agent.Agent):
 
     async def setup(self):
         print("Scheduling Agent starting...")
-        behav = EnergySchedueling_behav(period=10)
+        behav = EnergySchedueling_behav()
         self.add_behaviour(behav)
         

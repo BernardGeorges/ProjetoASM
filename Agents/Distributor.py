@@ -4,9 +4,14 @@
 #3. Send the energy produced to the correct houses
 
 from spade import agent
+from Behaviours.DistributeEnergy import DistributeEnergy
 
 class DistributorAgent(agent.Agent):
 
     async def setup(self):
         print("Distributor Agent starting...")
-        pass
+        b = DistributeEnergy()
+
+        self.add_behaviour(b)
+
+        

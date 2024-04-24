@@ -32,7 +32,6 @@ class EnergyManagerAgent(agent.Agent):
         hidrolics = int(input("Enter the amount of hidrolics turbines in the system: "))
 
         self.energySource = EnergySource(solar, wind, hidrolics)
-        #self.set("energySource", energySource)
 
         behav = InformEnergyProduced_behav(period=60)
         self.add_behaviour(behav)

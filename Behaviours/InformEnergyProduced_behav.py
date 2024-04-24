@@ -24,9 +24,9 @@ class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
         print("Source: Msg with Energy Produced sent to Scheduler")
 
         #Sending Energy produced to the distributer agent
-       # msgDistributor = Message(to=distributor_jid)
-       # msgDistributor.body = jsonpickle.encode(energy)
-       # msgDistributor.set_metadata("performative", "energy_transfer")
-       # await self.send(msgDistributor)
-#
-       # print("Energy Produced sent to Distributor")
+        msgDistributor = Message(to=distributor_jid)
+        msgDistributor.body = jsonpickle.encode(energy)
+        msgDistributor.set_metadata("performative", "energy_transfer")
+        await self.send(msgDistributor)
+
+        print("Energy Produced sent to Distributor")

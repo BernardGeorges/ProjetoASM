@@ -12,11 +12,11 @@ class HouseAgent(agent.Agent):
         print("House Agent starting...")
         self.battery = 0
 
-        behav = InformEnergyNeeded_behav(period=1)
+        behav = InformEnergyNeeded_behav()
         self.add_behaviour(behav)
 
 
-    def getNeededEnergy(self, maxTime = 1):
-        request = HouseRequest(self.jid, random.uniform(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1]), random.randint(1, maxTime))
+    def getNeededEnergy(self, maxTime = 10):
+        request = HouseRequest(self.jid.__str__(), random.uniform(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1]), random.randint(1, maxTime))
         return request
 

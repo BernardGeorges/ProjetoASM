@@ -3,7 +3,7 @@ from spade.message import Message
 import jsonpickle
 from aux_classes.HouseRequest import HouseRequest
 
-class InformEnergyNeeded_behav(behaviour.PeriodicBehaviour):
+class InformEnergyNeeded_behav(behaviour.CyclicBehaviour):
 
     async def run(self):
         print("InformEnergyProduced_behav: Running")

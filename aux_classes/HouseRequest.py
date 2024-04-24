@@ -15,3 +15,21 @@ class HouseRequest:
     
     def getTimeNeeded(self):
         return self.timeNeeded
+    
+    def __lt__(self, obj): 
+        return self.energyNeeded * self.timeNeeded < obj.energyNeeded * obj.timeNeeded
+  
+    def __gt__(self, obj): 
+        return self.energyNeeded * self.timeNeeded > obj.energyNeeded * obj.timeNeeded
+  
+    def __le__(self, obj): 
+        return self.energyNeeded * self.timeNeeded <= obj.energyNeeded * obj.timeNeeded
+  
+    def __ge__(self, obj): 
+        return self.energyNeeded * self.timeNeeded >= obj.energyNeeded * obj.timeNeeded
+  
+    def __eq__(self, obj): 
+        return self.energyNeeded == obj.energyNeeded and self.timeNeeded == obj.timeNeeded and self.jid == obj.jid
+    
+    def __repr__(self): 
+        return ("(House: {}, Energy Needed: {} kWh, needed Time: {}h)".format(self.getJid(),self.getEnergyNeeded(), self.getTimeNeeded()))

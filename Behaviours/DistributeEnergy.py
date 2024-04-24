@@ -5,6 +5,7 @@ from spade.message import Message
 import jsonpickle
 import time
 
+
 class DistributeEnergy(behaviour.CyclicBehaviour):
 
     async def send_energy(self, request : HouseRequest):
@@ -39,7 +40,6 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
 
     async def run(self):
         print("DistributeEnergy: Running")
-
         self.received_energy = None
         self.received_schedule = None
 
@@ -55,10 +55,15 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
         requests = self.received_schedule
        
         for request in requests: 
-            
             if(energyProduce - request.getEnergyNeeded()): 
                 print("Energy Produced: {}".format(energyProduce))
                 await self.send_energy(request)
                 energyProduce = energyProduce - request.getEnergyNeeded()
-
-
+            elif self.agent.battery.getCharge() > 0:
+                amount = self.agent.battery.discharge(request.getEnergyNeeded())
+                possibleOffer = HouseRequest(request.getJid(), amount, 1)
+                await self.send_energy(possibleOffer)
+                energyProduce = energyProduce - request.getEnergyNeeded()
+        
+        if energyProduce > 0:
+            self.agent.battery.charge(energyProduce)

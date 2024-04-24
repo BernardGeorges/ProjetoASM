@@ -5,12 +5,15 @@
 
 from spade import agent
 from Behaviours.DistributeEnergy import DistributeEnergy
+from aux_classes.Battery import Battery
 
 class DistributorAgent(agent.Agent):
 
     async def setup(self):
         print("Distributor Agent starting...")
+        self.battery = Battery(1000, 5, 10)
         b = DistributeEnergy()
+
 
         self.add_behaviour(b)
 

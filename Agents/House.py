@@ -3,6 +3,7 @@ import random
 
 from Behaviours.InformEnergyNeeded_behav import InformEnergyNeeded_behav
 from aux_classes.HouseRequest import HouseRequest
+from aux_classes.Battery import Battery 
 
 class HouseAgent(agent.Agent):
 
@@ -10,10 +11,11 @@ class HouseAgent(agent.Agent):
 
     async def setup(self):
         print("House Agent starting...")
-        self.battery = 0
+        self.battery = Battery(250, 5, 10)
 
         behav = InformEnergyNeeded_behav()
         self.add_behaviour(behav)
+
 
 
     def getNeededEnergy(self, maxTime = 10):

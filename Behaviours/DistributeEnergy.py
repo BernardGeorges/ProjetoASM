@@ -16,39 +16,40 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
         msg.body = jsonpickle.encode(energy)
         await self.send(msg)
 
-        print("Energy: {} sent to house: {}".format(request.getEnergyNeeded(),request.getJid()))	
+        print("     Energy: {} sent to house: {}".format(request.getEnergyNeeded(),request.getJid()))	
 
 
     async def receive_values(self):
         msg = await self.receive(timeout=75)
         if msg:
-            print("DistributeEnergy: Message received")
             performative = msg.get_metadata('performative')
             body =  msg.body
             if(performative == "energy_transfer"):
-                print("DistributeEnergy: Energy Produced received")
+                print("     DistributeEnergy: Energy Produced received")
                 body : Energy = jsonpickle.decode(body)
-                print("DistributeEnergy: Message Received \n Energy Produced: {} kWh, Valid Time: {}h".format(body.get_energy(), body.get_validTime()))
+                print("     DistributeEnergy: Message Received \n Energy Produced: {} kWh, Valid Time: {}h".format(body.get_energy(), body.get_validTime()))
                 self.received_energy = body                
             elif(performative == "send_schedule"):
-                print("DistributeEnergy: Energy Needed received")
+                print("     DistributeEnergy: Schedule received")
                 body = jsonpickle.decode(body)
                 self.received_schedule = body
             elif(performative == "get_battery"):
-                print("DistributeEnergy: Battery Level requested")
+                print("     DistributeEnergy: Battery Level requested")
                 battery = self.agent.battery.get_charge_left()
-                msg = Message(to=msg.sender)
+                msg = msg.make_reply()
                 msg.set_metadata("performative", "inform_battery")
                 msg.body = str(battery)
                 await self.send(msg)
             else:
-                print("DistributeEnergy: incorrect message received")
+                print("     DistributeEnergy: incorrect message received")
 
     async def distribute(self, requests, producedEnergy):
         hours_passed = 0
         timeout = producedEnergy.get_validTime()
         energyProduce = producedEnergy.get_energy()
+        print("     DistributeEnergy: hours passed: {}/timeout: {}".format(hours_passed, timeout))
         while hours_passed < timeout:
+            print("     DistributeEnergy: sending energy")
             for request in requests: 
                 if request.getTimeNeeded() == hours_passed:
                     requests.remove(request)
@@ -56,33 +57,36 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
                     if request.getSource() == "production":
                         energyProduce = energyProduce - request.getEnergyNeeded()
                         if energyProduce < 0:
-                            print("Scheduling error: Not enough energy produced")
-                        await self.send_energy()
+                            print("     Scheduling error: Not enough energy produced")
+                        await self.send_energy(request)
                     elif request.getSource() == "battery":
                         energyAmount = self.agent.battery.discharge(request.getEnergyNeeded())
                         if energyAmount == 0:
-                            print("Scheduling error: Not enough energy in the battery")
-                        await self.send_energy()
-            print("DistributeEnergy: Waiting for next hour")
-            time.sleep(60)
-        print("DistributeEnergy: Distribution finished")
+                            print("     Scheduling error: Not enough energy in the battery")
+                        await self.send_energy(request)
+            hours_passed += 1
+            if hours_passed < timeout:
+                time.sleep(60)
+                print("     DistributeEnergy: waiting for next hour")
+        print("     DistributeEnergy: Distribution finished")
+        return energyProduce
 
 
     async def run(self):
-        print("DistributeEnergy: Running")
+        #print("     DistributeEnergy: Running")
         self.received_energy = None
         self.received_schedule = None
-
 
         while self.received_energy == None or self.received_schedule == None:
             await self.receive_values()
 
         # Receive the energy produced by the energy sources
-        energyProduce = self.received_energy.get_energy()
-        print(self.received_schedule)
+        print("     Received Schedule: ".format(self.received_schedule))
         requests = self.received_schedule
 
-        self.distribute(requests, energyProduce)
+        energyLeft = await self.distribute(requests, self.received_energy)
         
-        if energyProduce > 0:
-            self.agent.battery.charge(energyProduce)
+        if energyLeft > 0:
+            self.agent.battery.charge(energyLeft)
+
+        print("                     Distribution finished")

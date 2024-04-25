@@ -10,8 +10,8 @@ class HouseAgent(agent.Agent):
     energyNeeded = {'unoccupied': (5,15), 'occupied': (10,50)}
 
     async def setup(self):
-        print("House Agent starting...")
-        self.battery = Battery(250, 5, 10)
+        #print("House Agent starting...")
+        self.battery = Battery(5, 10, 250, self.jid.__str__())
         self.currentRequest = None
 
         behav = InformEnergyNeeded_behav()

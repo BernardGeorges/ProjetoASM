@@ -1,8 +1,8 @@
 from aux_classes.HouseRequest import HouseRequest
 
 class Battery:
-    def __init__(self, charge_left: int, charging_rate, discharge_rate,max_charge, house_jid):
-        self.owner = house_jid
+    def __init__(self, charging_rate, discharge_rate,max_charge, owner_jid, charge_left = 0):
+        self.owner = owner_jid
         self.charge_left = charge_left
         self.max_charge = max_charge
         self.charging_rate = charging_rate

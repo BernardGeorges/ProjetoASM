@@ -9,12 +9,19 @@ from aux_classes.Battery import Battery
 
 class DistributorAgent(agent.Agent):
 
+    battery = None
+
     async def setup(self):
+<<<<<<< Updated upstream
+        #print("Distributor Agent starting...")
+        self.battery = Battery(5, 10, 1000, self.jid.__str__())
+        
+=======
         print("Distributor Agent starting...")
         self.battery = Battery(1000, 5, 10)
+
+>>>>>>> Stashed changes
         b = DistributeEnergy()
-
-
         self.add_behaviour(b)
 
         

@@ -29,6 +29,7 @@ if __name__ == '__main__':
     #Creating agents
     energyManager_agent = EnergyManagerAgent(energyManager_jid, PASSWORD)
     distributor_agent = DistributorAgent(distributor_jid, PASSWORD)
+    
     scheduling_agent = SchedulingAgent(scheduling_jid, PASSWORD)
 
     #Adding the agents to the platform
@@ -42,11 +43,13 @@ if __name__ == '__main__':
 
     # starting the agents
     for house_agent in house_agents:
-        house_agent.start()
-    distributor_agent.start()
+        res_house = house_agent.start()
+        res_house.result()
+    res_dist = distributor_agent.start()
+    res_dist.result()
     res_scheduler = scheduling_agent.start()
     res_scheduler.result()
-    energyManager_agent.start()    
+    energyManager_agent.start() 
 
     while scheduling_agent.is_alive():
         try:

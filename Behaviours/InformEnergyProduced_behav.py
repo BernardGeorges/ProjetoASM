@@ -8,7 +8,7 @@ class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
 
     async def run(self):
 
-        print("InformEnergyProduced_behav: Running")
+        #print("                     InformEnergyProduced_behav: Running")
 
         energyProduced= self.agent.energySource.get_generatedEnergy()
 
@@ -23,7 +23,7 @@ class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
         msgScheduler.set_metadata("performative", "inform_production")
         await self.send(msgScheduler)
 
-        print("Source: Msg with Energy Produced sent to Scheduler")
+        print("                     Source: Msg with Energy Produced sent to Scheduler")
 
         #Sending Energy produced to the distributer agent
         msgDistributor = Message(to=distributor_jid)
@@ -31,4 +31,6 @@ class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
         msgDistributor.set_metadata("performative", "energy_transfer")
         await self.send(msgDistributor)
 
-        print("Energy Produced sent to Distributor")
+        print("                     Energy Produced sent to Distributor")
+
+        print("                     InformEnergyProduced_behav: Finished")

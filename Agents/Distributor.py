@@ -9,12 +9,13 @@ from aux_classes.Battery import Battery
 
 class DistributorAgent(agent.Agent):
 
+    battery = None
+
     async def setup(self):
-        print("Distributor Agent starting...")
-        self.battery = Battery(1000, 5, 10)
+        #print("Distributor Agent starting...")
+        self.battery = Battery(5, 10, 1000, self.jid.__str__())
+        
         b = DistributeEnergy()
-
-
         self.add_behaviour(b)
 
         

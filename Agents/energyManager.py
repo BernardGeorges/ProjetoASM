@@ -38,7 +38,7 @@ class EnergySource():
             wind = weather["wind"]["speed"]
             hidrolics = weather["main"]["humidity"]*10
             solar = weather["main"]["temp"]/10
-            energyProduced = Energy((solar * self.sourcesAmount['solar'] + wind * self.sourcesAmount['wind'] + hidrolics * self.sourcesAmount['hidrolics'] , random.randint(1,5)), self.cycleTime)
+            energyProduced = Energy((solar * self.sourcesAmount['solar'] + wind * self.sourcesAmount['wind'] + hidrolics * self.sourcesAmount['hidrolics']), self.cycleTime)
             return energyProduced
 
 class EnergyManagerAgent(agent.Agent):

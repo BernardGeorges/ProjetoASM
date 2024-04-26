@@ -1,7 +1,7 @@
 from spade import agent
 import random
 
-from Behaviours.InformEnergyNeeded_behav import InformEnergyNeeded_behav
+from Behaviours.HouseBehav import HouseBehav
 from aux_classes.HouseRequest import HouseRequest
 from aux_classes.Battery import Battery 
 
@@ -14,7 +14,7 @@ class HouseAgent(agent.Agent):
         self.battery = Battery(5, 10, 250, self.jid.__str__())
         self.currentRequest = None
 
-        behav = InformEnergyNeeded_behav()
+        behav = HouseBehav()
         self.add_behaviour(behav)
 
 

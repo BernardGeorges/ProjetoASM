@@ -29,6 +29,7 @@ class Battery:
             self.charge_left = self.max_charge
         else: 
             self.charge_left += charge_amount
+        print("Battery: {}kWh charged with {} kWh".format(self.charge_left, charge_amount))
 
 
     def discharge(self, request: HouseRequest):

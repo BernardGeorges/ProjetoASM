@@ -97,7 +97,8 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
         schedule = []
         distribution_battery_level = await self.get_distribution_battery_level()
         print("         Energy Produced: {}".format(energyProduce))
-        for request in requests: 
+        for request in requests:
+            request.setTo("house") 
             if(energyProduce - request.getEnergyNeeded() >= 0): 
                 print("         Energy Produced: {}".format(energyProduce))
                 request.setSource("production")
@@ -121,16 +122,14 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
                     print("         Energy Produced: {}".format(energyProduce))
                     energyNeeded = battery.get_max_charge() - battery.get_charge_left()
                     timeNeeded = energyNeeded / battery.get_charging_rate()
-                    request = HouseRequest(battery.get_owner(), battery.get_charging_rate(), timeNeeded, battery.get_charge_left())
-                    request.setSource("production")
+                    request = HouseRequest(battery.get_owner(), battery.get_charging_rate(), timeNeeded, battery.get_charge_left(), "production", "battery")
                     schedule.append(request)
                     energyProduce = energyProduce - battery.get_charging_rate()
                 elif(distribution_battery_level - battery.get_charging_rate() >= 0):
                     print("         battery: {}".format(energyProduce))
                     energyNeeded = battery.get_max_charge() - battery.get_charge_left()
                     timeNeeded = energyNeeded / battery.get_charging_rate()
-                    request = HouseRequest(battery.get_owner(), battery.get_charging_rate(), timeNeeded, battery.get_charge_left())
-                    request.setSource("battery")
+                    request = HouseRequest(battery.get_owner(), battery.get_charging_rate(), timeNeeded, battery.get_charge_left(), "battery", "battery")
                     schedule.append(request)
                     distribution_battery_level = distribution_battery_level - battery.get_charging_rate()
                 else:

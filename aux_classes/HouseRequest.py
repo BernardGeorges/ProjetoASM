@@ -2,12 +2,13 @@
 
 class HouseRequest: 
 
-    def __init__(self, jid, energyNeeded, timeNeeded, battery_left):
+    def __init__(self, jid, energyNeeded, timeNeeded, battery_left, source=None, to=None):
         self.jid = jid
         self.energyNeeded = energyNeeded
         self.timeNeeded = timeNeeded
         self.battery_left = battery_left
         self.source = None
+        self.to = None
 
     def getJid(self):
         return self.jid
@@ -26,6 +27,12 @@ class HouseRequest:
 
     def getSource(self):
         return self.source
+    
+    def setTo(self, to):
+        self.to = to
+
+    def getTo(self):
+        return self.to
     
     def __lt__(self, obj): 
         return self.energyNeeded * self.timeNeeded < obj.energyNeeded * obj.timeNeeded

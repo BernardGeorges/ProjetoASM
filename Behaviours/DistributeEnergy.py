@@ -12,11 +12,18 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
         energy = Energy(request.getEnergyNeeded(), 1)
 
         msg = Message(to=request.getJid())
-        msg.set_metadata("performative", "send_energy")
+        print("TO: {}".format(request.getTo()))
+        if request.getTo() == "battery":
+            print("     Energy: {} sent to battery".format(request.getEnergyNeeded()))
+            msg.set_metadata("performative", "charge_battery")
+        else:
+            msg.set_metadata("performative", "energy_transfer")
+            print("     Energy: {} sent to house: {}".format(request.getEnergyNeeded(),request.getJid()))	
+
         msg.body = jsonpickle.encode(energy)
+        print(msg)
         await self.send(msg)
 
-        print("     Energy: {} sent to house: {}".format(request.getEnergyNeeded(),request.getJid()))	
 
 
     async def receive_values(self):
@@ -47,23 +54,24 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
         hours_passed = 0
         timeout = producedEnergy.get_validTime()
         energyProduce = producedEnergy.get_energy()
+        energyAmount = 0
         print("     DistributeEnergy: hours passed: {}/timeout: {}".format(hours_passed, timeout))
         while hours_passed < timeout:
             print("     DistributeEnergy: sending energy")
+            print("     DistributeEnergy: requests: {}".format(requests))
             for request in requests: 
                 if request.getTimeNeeded() == hours_passed:
                     requests.remove(request)
                 else:
+                    print("     DistributeEnergy: time: {}, hours_passed: {}".format(request.getTimeNeeded(), hours_passed))
                     if request.getSource() == "production":
                         energyProduce = energyProduce - request.getEnergyNeeded()
-                        if energyProduce < 0:
-                            print("     Scheduling error: Not enough energy produced")
-                        await self.send_energy(request)
                     elif request.getSource() == "battery":
                         energyAmount = self.agent.battery.discharge(request.getEnergyNeeded())
-                        if energyAmount == 0:
-                            print("     Scheduling error: Not enough energy in the battery")
-                        await self.send_energy(request)
+                    if energyAmount < 0 or energyProduce < 0:
+                        print("     Scheduling error: Not enough energy in the battery")
+                        raise("     Scheduling error: Not enough energy in the battery")
+                    await self.send_energy(request)
             hours_passed += 1
             if hours_passed < timeout:
                 time.sleep(60)

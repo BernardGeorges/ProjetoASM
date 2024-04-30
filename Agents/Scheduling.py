@@ -8,8 +8,10 @@ from Behaviours.EnergySchedueling import EnergySchedueling_behav
 
 class SchedulingAgent(agent.Agent):
 
+    housesSubscribed = []
+
     async def setup(self):
-        #print("Scheduling Agent starting...")
+        print("Scheduling Agent starting...")
         behav = EnergySchedueling_behav()
         self.add_behaviour(behav)
         

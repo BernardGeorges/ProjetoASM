@@ -24,7 +24,7 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
     async def __request_needed_houses(self, maxTime):
         ret = []
         print("         Scheduler: getting energyNeeded ...")
-        houses_jid = self.agent.get("house_jid")
+        houses_jid = self.agent.housesSubscribed
         for house in houses_jid:
             msg = Message(to=house)
             msg.set_metadata("performative", "inform_start")
@@ -51,7 +51,7 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
     async def __request_batteries(self):
         ret = []
         print("         Scheduler: getting battery values ...")
-        houses_jid = self.agent.get("house_jid")
+        houses_jid = self.agent.housesSubscribed
         for house in houses_jid:
             msg = Message(to=house)
             msg.set_metadata("performative", "request_battery")
@@ -162,9 +162,13 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
                 await self.__send_energy(schedule)
                 print("         Scheduler: schedule sent to distributor")
                 print("                     Scheduler: scheduling done")
+            elif(performative == "subscribe"):
+                print("         Scheduler: House {} subscribed".format(msg.sender)) 
+                self.agent.housesSubscribed.append(str(msg.sender))
+            elif(performative == "unsubscribe"):
+                print("         Scheduler: House {} unsubscribed".format(msg.sender))
+                self.agent.housesSubscribed.remove(str(msg.sender))
             else:
                 print("         Scheduler: incorrect message received")
-        else:
-            print("         Scheduler: No message received")
 
         

@@ -45,9 +45,6 @@ class HouseBehav(behaviour.CyclicBehaviour):
                 print("             House: Energy Received \n Energy: {} kWh, Valid Time: {}h".format(energy.get_energy(), energy.get_validTime()))
             else:
                  print("            House: Message not understood")
-        else:
-            print("             House: No message received")
-
         print("                     InformEnergyNeeded_behav: Finished")
 
         

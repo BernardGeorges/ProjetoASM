@@ -21,7 +21,6 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
             print("     Energy: {} sent to house: {}".format(request.getEnergyNeeded(),request.getJid()))	
 
         msg.body = jsonpickle.encode(energy)
-        print(msg)
         await self.send(msg)
 
 

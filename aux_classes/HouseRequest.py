@@ -2,9 +2,9 @@
 
 class HouseRequest: 
 
-    def __init__(self, jid, energyNeeded, timeNeeded, battery_left, source=None, to=None):
+    def __init__(self, jid, energyNeeded, timeNeeded, battery_left,home_length,home_width, source=None, to=None):
         self.jid = jid
-        self.energyNeeded = energyNeeded
+        self.energyNeeded = energyNeeded * ((home_length*home_width)/10)
         self.timeNeeded = timeNeeded
         self.battery_left = battery_left
         self.source = None

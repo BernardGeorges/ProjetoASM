@@ -10,6 +10,8 @@ from aux_classes.Battery import Battery
 class HouseAgent(agent.Agent):
 
     energyNeeded = {'unoccupied': (5,15), 'occupied': (10,50)}
+    width = random.randrange(10,25)
+    length = random.randrange(15,20)
 
     async def setup(self):
         print("House Agent starting...")
@@ -31,6 +33,11 @@ class HouseAgent(agent.Agent):
         self.stop()
 
     def getNeededEnergy(self, maxTime = 10):
-        request = HouseRequest(self.jid.__str__(), random.uniform(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1]), random.randint(1, maxTime), self.battery.get_charge_left())
+        request = HouseRequest(self.jid.__str__(),
+                                random.uniform(self.energyNeeded['occupied'][0], self.energyNeeded['occupied'][1]),
+                                random.randint(1, maxTime),
+                                self.battery.get_charge_left(),
+                                self.length,
+                                self.width)
         return request
 

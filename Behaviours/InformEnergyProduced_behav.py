@@ -11,7 +11,6 @@ class InformEnergyProduced_behav(behaviour.PeriodicBehaviour):
         #print("                     InformEnergyProduced_behav: Running")
 
         energyProduced= self.agent.energySource.get_generatedEnergy()
-
         scheduler_jid = self.agent.get("scheduler_jid")
         distributor_jid = self.agent.get("distributor_jid")
 

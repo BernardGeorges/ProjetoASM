@@ -61,7 +61,7 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
             for request in requests: 
                 if request.getTimeNeeded() == hours_passed:
                     requests.remove(request)
-                else:
+                else:   
                     print("     DistributeEnergy: time: {}, hours_passed: {}".format(request.getTimeNeeded(), hours_passed))
                     if request.getSource() == "production":
                         energyProduce = energyProduce - request.getEnergyNeeded()

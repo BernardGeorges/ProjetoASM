@@ -2,13 +2,13 @@
 
 class HouseRequest: 
 
-    def __init__(self, jid, energyNeeded, timeNeeded, battery_left,home_length,home_width, source=None, to=None):
+    def __init__(self, jid, energyNeeded, timeNeeded, battery_left, source=None, to=None):
         self.jid = jid
-        self.energyNeeded = energyNeeded * ((home_length*home_width)/10)
+        self.energyNeeded = energyNeeded 
         self.timeNeeded = timeNeeded
         self.battery_left = battery_left
-        self.source = None
-        self.to = None
+        self.source = source
+        self.to = to
 
     def getJid(self):
         return self.jid

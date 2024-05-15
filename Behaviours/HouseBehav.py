@@ -10,9 +10,9 @@ class HouseBehav(behaviour.CyclicBehaviour):
 
         # wait to receive the start signal from the scheduler
         receiveStart = await self.receive(timeout=10)
-        print("             InformEnergyNeeded_behav: Message received")
-
+    
         if receiveStart: 
+            print("             HouseBehaviour: Message received", receiveStart)
             performative = receiveStart.get_metadata('performative')
             if(performative == "inform_start"):
                 print("             House: Start signal received")
@@ -37,14 +37,17 @@ class HouseBehav(behaviour.CyclicBehaviour):
                 print("             House: Charging battery")
                 body = receiveStart.body
                 energy = jsonpickle.decode(body)
-                self.agent.battery.charge(energy.charge(energy.get_energy()))
+                self.agent.battery.charge(energy.get_energy())
             elif(performative == "energy_transfer"):
                 print("             House: Energy received")
                 body = receiveStart.body
                 energy = jsonpickle.decode(body)
                 print("             House: Energy Received \n Energy: {} kWh, Valid Time: {}h".format(energy.get_energy(), energy.get_validTime()))
+            elif(performative == "inform_stop"):
+                print("             House: Stop signal received")
+                self.agent.revisedStop()
             else:
                  print("            House: Message not understood")
-        print("                     InformEnergyNeeded_behav: Finished")
+        print("                     HouseBehaviour: Finished")
 
         

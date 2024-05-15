@@ -18,7 +18,7 @@ class HouseAgent(agent.Agent):
         self.battery = Battery(5, 10, 250, self.jid.__str__())
         self.currentRequest = None
 
-        subscription = SubscribeHouse()
+        subscription = SubscribeHouse(period=5)
         behav = HouseBehav()
         self.add_behaviour(subscription)
         self.add_behaviour(behav)

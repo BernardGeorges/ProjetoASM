@@ -1,6 +1,6 @@
 from spade import behaviour, message
 
-class SubscribeHouse(behaviour.OneShotBehaviour):
+class SubscribeHouse(behaviour.PeriodicBehaviour):
 
     async def run(self):
         scheduler_jid = self.agent.get("scheduler_jid")

@@ -49,6 +49,9 @@ class HouseBehav(behaviour.CyclicBehaviour):
             elif(performative == "ack_stop"):
                 print("             House: Stop acknoledgement received")
                 await self.agent.stop()
+            elif(performative == "ack_start"):
+                print("             House: Start acknoledgement received")
+                self.agent.remove_behaviour(self.agent.behaviours[0])
             else:
                  print("            House: Message not understood")
         print("                     HouseBehaviour: Finished")

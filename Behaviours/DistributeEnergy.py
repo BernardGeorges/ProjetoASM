@@ -54,7 +54,6 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
         timeout = producedEnergy.get_validTime()
         energyProduce = producedEnergy.get_energy()
         energyAmount = 0
-        print("     DistributeEnergy: hours passed: {}/timeout: {}".format(hours_passed, timeout))
         while hours_passed < timeout:
             print("     DistributeEnergy: sending energy")
             print("     DistributeEnergy: requests: {}".format(requests))
@@ -72,9 +71,10 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
                         raise("     Scheduling error: Not enough energy in the battery")
                     await self.send_energy(request)
             hours_passed += 1
-            if hours_passed < timeout:
-                time.sleep(60)
+            if hours_passed <= timeout:
+                time.sleep(10)
                 print("     DistributeEnergy: waiting for next hour")
+            print("     DistributeEnergy: hours passed: {}/timeout: {}".format(hours_passed, timeout))
         print("     DistributeEnergy: Distribution finished")
         return energyProduce
 

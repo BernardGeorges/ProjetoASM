@@ -52,5 +52,5 @@ class EnergyManagerAgent(agent.Agent):
 
         self.energySource = EnergySource(solar, wind, hidrolics, max_time)
 
-        behav = InformEnergyProduced_behav(period=30*max_time) #period is the time in seconds between each energy production which indicates the max_time
+        behav = InformEnergyProduced_behav(period=15*max_time) #period is the time in seconds between each energy production which indicates the max_time
         self.add_behaviour(behav)

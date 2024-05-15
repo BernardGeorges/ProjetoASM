@@ -39,7 +39,7 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             distributor_agent.stop()
             energyManager_agent.stop()
-            scheduling_agent.stop()
+            scheduling_agent.revisedStop()
             break
     print('Agents finished')
 

@@ -45,7 +45,7 @@ class HouseBehav(behaviour.CyclicBehaviour):
                 print("             House: Energy Received \n Energy: {} kWh, Valid Time: {}h".format(energy.get_energy(), energy.get_validTime()))
             elif(performative == "inform_stop"):
                 print("             House: Stop signal received")
-                self.agent.revisedStop()
+                await self.agent.stop()
             elif(performative == "ack_stop"):
                 print("             House: Stop acknoledgement received")
                 await self.agent.stop()

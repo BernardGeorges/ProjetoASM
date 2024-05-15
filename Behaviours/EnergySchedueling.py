@@ -168,6 +168,9 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
             elif(performative == "unsubscribe"):
                 print("         Scheduler: House {} unsubscribed".format(msg.sender))
                 self.agent.housesSubscribed.remove(str(msg.sender))
+                msg = msg.make_reply()
+                msg.set_metadata("performative", "ack_stop")
+                await self.send(msg)
             else:
                 print("         Scheduler: incorrect message received")
 

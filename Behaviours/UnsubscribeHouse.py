@@ -1,6 +1,6 @@
 from spade import behaviour, message
 
-class UnsubscribeHouse(behaviour.OneShotBehaviour):
+class UnsubscribeHouse(behaviour.PeriodicBehaviour):
 
     async def run(self):
         scheduler_jid = self.agent.get("scheduler_jid")

@@ -25,7 +25,7 @@ class HouseAgent(agent.Agent):
 
     def revisedStop(self):    
         print("House Agent stopping...")
-        unsubscribe = UnsubscribeHouse()
+        unsubscribe = UnsubscribeHouse(period=5)
         self.add_behaviour(unsubscribe)
         while not unsubscribe.is_done():
             pass

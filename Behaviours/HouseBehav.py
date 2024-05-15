@@ -12,7 +12,7 @@ class HouseBehav(behaviour.CyclicBehaviour):
         receiveStart = await self.receive(timeout=10)
     
         if receiveStart: 
-            print("             HouseBehaviour: Message received", receiveStart)
+            print("             HouseBehaviour: Message received")
             performative = receiveStart.get_metadata('performative')
             if(performative == "inform_start"):
                 print("             House: Start signal received")
@@ -46,6 +46,9 @@ class HouseBehav(behaviour.CyclicBehaviour):
             elif(performative == "inform_stop"):
                 print("             House: Stop signal received")
                 self.agent.revisedStop()
+            elif(performative == "ack_stop"):
+                print("             House: Stop acknoledgement received")
+                await self.agent.stop()
             else:
                  print("            House: Message not understood")
         print("                     HouseBehaviour: Finished")

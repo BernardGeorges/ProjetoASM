@@ -39,7 +39,7 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
                 print("     DistributeEnergy: Schedule received")
                 body = jsonpickle.decode(body)
                 self.received_schedule = body
-            elif(performative == "get_battery"):
+            elif(performative == "request_battery"):
                 print("     DistributeEnergy: Battery Level requested")
                 battery = self.agent.battery.get_charge_left()
                 msg = msg.make_reply()
@@ -60,6 +60,9 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
             for request in requests: 
                 if request.getTimeNeeded() == hours_passed:
                     requests.remove(request)
+                elif request.getJid() == "distributor":
+                    print("     DistributeEnergy: Distributing energy to the battery")
+                    energyAmount = self.agent.battery.charge(request.getEnergyNeeded())
                 else:   
                     print("     DistributeEnergy: time: {}, hours_passed: {}".format(request.getTimeNeeded(), hours_passed))
                     if request.getSource() == "production":
@@ -71,7 +74,7 @@ class DistributeEnergy(behaviour.CyclicBehaviour):
                         raise("     Scheduling error: Not enough energy in the battery")
                     await self.send_energy(request)
             hours_passed += 1
-            if hours_passed <= timeout:
+            if hours_passed < timeout:
                 time.sleep(10)
                 print("     DistributeEnergy: waiting for next hour")
             print("     DistributeEnergy: hours passed: {}/timeout: {}".format(hours_passed, timeout))

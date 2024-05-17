@@ -76,7 +76,7 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
     
     async def get_distribution_battery_level(self):
         msg = Message(to=self.agent.get("distributor_jid"))
-        msg.set_metadata("performative", "get_battery")
+        msg.set_metadata("performative", "request_battery")
         await self.send(msg)
 
         msg = await self.receive(timeout=5)
@@ -135,6 +135,10 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
                 else:
                     print("         No energy available")
         
+        if(energyProduce > 0):
+            request = HouseRequest("distributor", energyProduce, 1, 0, "production", "battery")
+            schedule.append(request)
+        
         print("=============================================")
         return schedule
 
@@ -159,15 +163,19 @@ class EnergySchedueling_behav(behaviour.CyclicBehaviour):
                 schedule = await self.set_schedule(energyProduce, orders)
                 print("         Scheduler: Schedule set: {}".format(schedule))
 
+                
+
                 await self.__send_energy(schedule)
                 print("         Scheduler: schedule sent to distributor")
                 print("                     Scheduler: scheduling done")
             elif(performative == "subscribe"):
                 print("         Scheduler: House {} subscribed".format(msg.sender)) 
-                self.agent.housesSubscribed.append(str(msg.sender))
-                msg = msg.make_reply()
-                msg.set_metadata("performative", "ack_start")
-                await self.send(msg)
+                house = str(msg.sender)
+                if house not in self.agent.housesSubscribed:
+                    self.agent.housesSubscribed.append(house)
+                    msg = msg.make_reply()
+                    msg.set_metadata("performative", "ack_start")
+                    await self.send(msg)
             elif(performative == "unsubscribe"):
                 print("         Scheduler: House {} unsubscribed".format(msg.sender))
                 self.agent.housesSubscribed.remove(str(msg.sender))
